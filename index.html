@@ -243,6 +243,34 @@
         opacity: 1;
       }
     }
+
+    .alert-success {
+      color: #0f5132;
+      background-color: #d1e7dd;
+      border-color: #badbcc
+    }
+
+    .alert {
+      position: relative;
+      padding: 1rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid transparent;
+      border-radius: .25rem
+    }
+
+    .alert-danger {
+      color: #842029;
+      background-color: #f8d7da;
+      border-color: #f5c2c7
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    button#enviar {
+      letter-spacing: 2px;
+    }
   </style>
 
 </head>
@@ -320,7 +348,7 @@
       <div class="col-span-1 sm:col-span-2">
         <button id="enviar" disabled
           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/70 h-11 rounded-md px-8 w-full md:w-fit"
-          type="submit">Enviar</button>
+          type="submit">ENVIAR MI SUGERENCIA / RECOMENDACIÓN </button>
       </div>
       <div class="contact-form-loader none">
         <img src="assets/" alt="Cargando">
@@ -438,6 +466,7 @@
 
           messageDiv.classList.add('alert', 'alert-success');
           messageDiv.textContent = '✅ Formulario enviado correctamente.';
+          messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
           form.reset();
           grecaptcha.reset(recaptchaWidgetId);
           document.getElementById('enviar').disabled = true;
@@ -449,6 +478,7 @@
         function showError(msg) {
           messageDiv.classList.add('alert', 'alert-danger');
           messageDiv.textContent = '❌ ' + msg;
+          messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       });
     });
