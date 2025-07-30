@@ -354,7 +354,7 @@
       recaptchaWidgetId = grecaptcha.render(container, {
         sitekey: '6LdxGWwrAAAAAP3bxmkm37nNQjDnFnSqAjzJ2hQr',
         callback: function (token) {
-          document.getElementById('g-recaptcha-response').value = token;
+          // Ya no es necesario llenar g-recaptcha-response en un input oculto si enviamos JSON directo
           document.getElementById('enviar').disabled = false;
         }
       });
@@ -369,15 +369,14 @@
         messageDiv.textContent = '';
         messageDiv.className = '';
 
-        const formData = new FormData(form);
-
-        const nombre = formData.get('nombre')?.trim() || '';
-        const telefono = formData.get('telefono')?.trim() || '';
-        const email = formData.get('email')?.trim() || '';
-        const desarrollo = formData.get('desarrollo')?.trim() || '';
-        const mensaje = formData.get('mensaje')?.trim() || '';
-        const acepto = formData.has('aviso');
-        const recaptchaToken = formData.get('g-recaptcha-response');
+        // Recopilamos los datos directamente desde el formulario
+        const nombre = form.nombre.value.trim();
+        const telefono = form.telefono.value.trim();
+        const email = form.email.value.trim();
+        const desarrollo = form.desarrollo.value.trim();
+        const mensaje = form.mensaje.value.trim();
+        const acepto = form.aviso.checked;
+        const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetId);
 
         // Validaciones
         const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{4,}$/;
@@ -415,9 +414,19 @@
         }
 
         try {
+          // Enviar datos como JSON
           const response = await fetch(form.action, {
             method: 'POST',
-            body: formData,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre,
+              telefono,
+              email,
+              desarrollo,
+              mensaje,
+              aviso: acepto,
+              "g-recaptcha-response": recaptchaToken,
+            }),
           });
 
           const result = await response.json();
@@ -443,6 +452,7 @@
         }
       });
     });
+
   </script>
 
 </body>
